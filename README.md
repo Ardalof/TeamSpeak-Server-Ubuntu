@@ -62,3 +62,5 @@ sudo apt update && sudo apt install bzip2
 
 Enter ****cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64**** and press **Enter** to download the server.
 
+Accept the TeamSpeak License **touch .ts3server_license_accepted**.
+
