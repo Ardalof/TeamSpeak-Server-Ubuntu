@@ -39,4 +39,26 @@ In the 'Target' (required) field, you can enter the endpoint address to be used 
 ![image](https://github.com/user-attachments/assets/068e59d7-3753-41c8-839f-60a895b7c705)
 
 
+Step 3 - Preparing the server
+---------------------------------------------------------------------
+First, you have to log in to your server via SSH or Username & password.
+
+Enter **sudo -s** to get root rights.
+
+Enter your password and press **Enter**.
+
+Now enter **apt update -y && apt upgrade -y** to update the server.
+
+If a pink window appears, press Enter once to continue.
+
+Enter adduser **--disabled-password --gecos "" teamspeak && sudo su teamspeak** and press **Enter** to create a new user and switch to it.
+
+
+Step 4 - Installing TeamSpeak
+---------------------------------------------------------------------
+You need to install the **bzip2** software for the installation, which you can install through this method.
+
+sudo apt update && sudo apt install bzip2
+
+Enter ****cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64**** and press **Enter** to download the server.
 
