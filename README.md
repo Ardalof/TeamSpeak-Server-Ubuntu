@@ -28,3 +28,8 @@ Step 2 - Configuring DNS-Cloudflare
 Enter your domain in Cloudflare, and after completing the verification process, go to the DNS-Records.
 ![image](https://github.com/user-attachments/assets/4fdc692c-a6d8-4275-84f3-d1371878efdb)
 
+Create an **A** record and set the values.
+![image](https://github.com/user-attachments/assets/fd555d3b-2d6c-47fe-9202-afa9044100bc)
+
+
+
