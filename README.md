@@ -41,82 +41,140 @@ In the 'Target' (required) field, you can enter the endpoint address to be used 
 
 Step 3 - Preparing the server
 ---------------------------------------------------------------------
-First, you have to log in to your server via SSH or Username & password.
+Here's a step-by-step guide to install a **TeamSpeak 3 server on Ubuntu**, configure it to use a **custom port instead of the default 9987**, and make the necessary **firewall changes** permanent.
 
-Enter **`sudo -s`** to get root rights.
+---
 
-Enter your password and press **`Enter`**.
+### **Step 1: Install TeamSpeak Server on Ubuntu**
 
-Now enter:
+1. **Create a new user for TeamSpeak (optional but recommended):**
 
-**`apt update -y && apt upgrade -y`** 
+   ```bash
+   sudo adduser --disabled-login teamspeak
+   ```
 
-If a pink window appears, press Enter once to continue.
+2. **Switch to the new user and download TeamSpeak Server:**
 
-Enter:
+   ```bash
+   sudo su - teamspeak
+   wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2
+   tar -xjf teamspeak3-server_linux_amd64-3.13.7.tar.bz2
+   mv teamspeak3-server_linux_amd64/* .
+   rm -r teamspeak3-server_linux_amd64*
+   exit
+   ```
 
-**`adduser --disabled-password --gecos "" teamspeak && sudo su teamspeak`** 
+3. **Accept license agreement and enable the server as a service:**
 
-and press **Enter** to create a new user and switch to it.
+   ```bash
+   sudo touch /home/teamspeak/.ts3server_license_accepted
+   ```
 
+4. **Create a systemd service:**
 
-Step 4 - Installing TeamSpeak
----------------------------------------------------------------------
-You need to install the **`bzip2`** software for the installation, which you can install through this method.
+   ```bash
+   sudo nano /etc/systemd/system/teamspeak.service
+   ```
 
-**`sudo apt update && sudo apt install bzip2`**
+   Paste the following:
 
-Enter:
+   ```ini
+   [Unit]
+   Description=TeamSpeak 3 Server
+   After=network.target
 
-**`cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64`**
+   [Service]
+   WorkingDirectory=/home/teamspeak
+   User=teamspeak
+   Group=teamspeak
+   Type=forking
+   ExecStart=/home/teamspeak/ts3server_startscript.sh start
+   ExecStop=/home/teamspeak/ts3server_startscript.sh stop
+   ExecReload=/home/teamspeak/ts3server_startscript.sh restart
+   PIDFile=/home/teamspeak/ts3server.pid
+   Restart=on-failure
 
-and press **`Enter`**
+   [Install]
+   WantedBy=multi-user.target
+   ```
 
-Accept the TeamSpeak License
+   Then reload systemd and start the service:
 
-**`touch .ts3server_license_accepted`**
+   ```bash
+   sudo systemctl daemon-reexec
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now teamspeak
+   ```
 
+---
 
-Step 5 - Setting up TeamSpeak to start on boot
----------------------------------------------------------------------
-We want TeamSpeak to start automatically when the server starts. This is useful when the server is restarted so that TeamSpeak also starts automatically.
+### **Step 2: Change Default Voice Port (9987) to Custom Port**
 
-1. Enter **`exit`** and press **`Enter`** to return to the root user.
-2. Enter **`nano /etc/systemd/system/teamspeak.service`** and press **`Enter`** to create a new systemd service file.
-3. Paste the following code into this file:
+1. **Edit `ts3server.ini` (create it if not existing):**
 
-```systemd
-[Unit]
-Description=TeamSpeak 3 Server
-After=network.target
+   ```bash
+   sudo nano /home/teamspeak/ts3server.ini
+   ```
 
-[Service]
-WorkingDirectory=/home/teamspeak
-User=teamspeak
-ExecStart=/home/teamspeak/ts3server_startscript.sh start inifile=ts3server.ini
-ExecStop=/home/teamspeak/ts3server_startscript.sh stop
-PIDFile=/home/teamspeak/ts3server.pid
-RestartSec=15
-Restart=always
+   Add or change the following lines:
 
-[Install]
-WantedBy=multi-user.target
-```
+   ```ini
+   default_voice_port=12345
+   ```
 
-4. Exit the file by pressing **`Ctrl + X`** and then **`Y`** and then **`Enter`**.
-5. Enter **`systemctl daemon-reload && systemctl enable teamspeak && systemctl start teamspeak`** to reload the systemd daemon.
+   *(Replace `12345` with your custom port)*
 
-Step 6 - Setting up the firewall
----------------------------------------------------------------------
-We need a firewall to protect our server from unwanted connections.
+2. **Tell the server to use this config file:**
+   Edit the startscript (`ts3server_startscript.sh`) or override it in systemd:
 
-We will use ufw (Uncomplicated Firewall) to set up the firewall, as it is easy to use and configure and is also preinstalled on Ubuntu.
+   Open `/etc/systemd/system/teamspeak.service` again and change this line:
 
-Enter:
+   ```ini
+   ExecStart=/home/teamspeak/ts3server_startscript.sh start
+   ```
 
- **`ufw allow 9987,10123/udp && ufw allow 30033,10011,10080,10443,41144,22/tcp && ufw enable`** 
- 
- to add various required ports to the firewall.
- 
-Press **`Y`** and then **`Enter**` to confirm.
+   To:
 
+   ```ini
+   ExecStart=/home/teamspeak/ts3server_linux_amd64/ts3server_minimal_runscript.sh inifile=ts3server.ini
+   ```
+
+   Reload and restart:
+
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl restart teamspeak
+   ```
+
+---
+
+### **Step 3: Open Custom Port in the Firewall Permanently**
+
+1. **Allow the custom port using UFW (replace `12345` with your port):**
+
+   ```bash
+   sudo ufw allow 12345/udp
+   ```
+
+2. **Ensure UFW is enabled:**
+
+   ```bash
+   sudo ufw enable
+   ```
+
+3. **Check status:**
+
+   ```bash
+   sudo ufw status
+   ```
+
+---
+
+### **Step 4: Verify**
+
+* Connect from your TeamSpeak client using your server IP and the custom port.
+* Example: `yourdomain.com:12345` or `IP:12345`.
+
+---
+
+Would you like me to provide a full script that automates this entire process?
