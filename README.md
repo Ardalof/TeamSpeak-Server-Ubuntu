@@ -170,7 +170,3 @@ Here's a step-by-step guide to install a **TeamSpeak 3 server on Ubuntu**, confi
 
 * Connect from your TeamSpeak client using your server IP and the custom port.
 * Example: `yourdomain.com:12345` or `IP:12345`.
-
----
-
-Would you like me to provide a full script that automates this entire process?
