@@ -47,11 +47,17 @@ Enter **`sudo -s`** to get root rights.
 
 Enter your password and press **`Enter`**.
 
-Now enter **`apt update -y && apt upgrade -y`** to update the server.
+Now enter:
+
+**`apt update -y && apt upgrade -y`** 
 
 If a pink window appears, press Enter once to continue.
 
-Enter **`adduser --disabled-password --gecos "" teamspeak && sudo su teamspeak`** and press **Enter** to create a new user and switch to it.
+Enter:
+
+**`adduser --disabled-password --gecos "" teamspeak && sudo su teamspeak`** 
+
+and press **Enter** to create a new user and switch to it.
 
 
 Step 4 - Installing TeamSpeak
@@ -60,8 +66,16 @@ You need to install the **`bzip2`** software for the installation, which you can
 
 **`sudo apt update && sudo apt install bzip2`**
 
-1. Enter **`cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64`** and press **`Enter`** to download the server.
-2. Accept the TeamSpeak License **`touch .ts3server_license_accepted`**.
+Enter:
+
+**`cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64`**
+
+and press **`Enter`**
+
+Accept the TeamSpeak License
+
+**`touch .ts3server_license_accepted`**
+
 
 Step 5 - Setting up TeamSpeak to start on boot
 ---------------------------------------------------------------------
@@ -94,3 +108,15 @@ WantedBy=multi-user.target
 
 Step 6 - Setting up the firewall
 ---------------------------------------------------------------------
+We need a firewall to protect our server from unwanted connections.
+
+We will use ufw (Uncomplicated Firewall) to set up the firewall, as it is easy to use and configure and is also preinstalled on Ubuntu.
+
+Enter:
+
+ **`ufw allow 9987,10123/udp && ufw allow 30033,10011,10080,10443,41144,22/tcp && ufw enable`** 
+ 
+ to add various required ports to the firewall.
+ 
+Press **`Y`** and then **`Enter**` to confirm.
+
