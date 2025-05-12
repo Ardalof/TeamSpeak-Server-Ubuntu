@@ -51,7 +51,7 @@ Now enter **`apt update -y && apt upgrade -y`** to update the server.
 
 If a pink window appears, press Enter once to continue.
 
-Enter adduser **`--disabled-password --gecos "" teamspeak && sudo su teamspeak`** and press **Enter** to create a new user and switch to it.
+Enter **`adduser --disabled-password --gecos "" teamspeak && sudo su teamspeak`** and press **Enter** to create a new user and switch to it.
 
 
 Step 4 - Installing TeamSpeak
