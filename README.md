@@ -1,6 +1,6 @@
 Introduction
 ---------------------------------------------------------------------
-This tutorial describes how to install a TeamSpeak server on your VPS ((I recommend Contabo's VPS))
+This tutorial describes how to install a TeamSpeak server on your Ubuntu VPS and set up port forwarding through Cloudflare (I recommend Contabo's VPS)
 
 The tutorial was Tested on Ubuntu 22.04 and 24 using Teamspeak-Server Version 3.13.7!
 
@@ -21,3 +21,10 @@ You also need a domain, with a domain from a web hosting package being sufficien
 
 Step 1 - Finding out the IP of your server
 ---------------------------------------------------------------------
+You will receive the server details via email immediately after purchase, or you can view them through the server-portal.
+
+Step 2 - Configuring DNS-Cloudflare
+---------------------------------------------------------------------
+Enter your domain in Cloudflare, and after completing the verification process, go to the DNS-Records.
+![image](https://github.com/user-attachments/assets/4fdc692c-a6d8-4275-84f3-d1371878efdb)
+
