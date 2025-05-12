@@ -43,10 +43,6 @@ Step 3 - Preparing the server
 ---------------------------------------------------------------------
 Here's a step-by-step guide to install a **TeamSpeak 3 server on Ubuntu**, configure it to use a **custom port instead of the default 9987**, and make the necessary **firewall changes** permanent.
 
----
-
-### **Step 1: Install TeamSpeak Server on Ubuntu**
-
 1. **Create a new user for TeamSpeak (optional but recommended):**
 
    ```bash
