@@ -32,7 +32,9 @@ Create an **A** record and set the values.
 ![image](https://github.com/user-attachments/assets/fd555d3b-2d6c-47fe-9202-afa9044100bc)
 
 Create an **SRV** record and enter **_ts3._udp** in the **Name** (required) field.
+
 In the 'Port' field, enter the port you want the TeamSpeak server to use. (The default port is 9987, but it may be filtered in some countries).
+
 In the 'Target' (required) field, you can enter the endpoint address to be used in TeamSpeak. I didn't use a subdomain here; instead, I assigned a full domain to it.
 ![image](https://github.com/user-attachments/assets/068e59d7-3753-41c8-839f-60a895b7c705)
 
