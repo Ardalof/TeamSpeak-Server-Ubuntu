@@ -43,24 +43,54 @@ Step 3 - Preparing the server
 ---------------------------------------------------------------------
 First, you have to log in to your server via SSH or Username & password.
 
-Enter **sudo -s** to get root rights.
+Enter **`sudo -s`** to get root rights.
 
-Enter your password and press **Enter**.
+Enter your password and press **`Enter`**.
 
-Now enter **apt update -y && apt upgrade -y** to update the server.
+Now enter **`apt update -y && apt upgrade -y`** to update the server.
 
 If a pink window appears, press Enter once to continue.
 
-Enter adduser **--disabled-password --gecos "" teamspeak && sudo su teamspeak** and press **Enter** to create a new user and switch to it.
+Enter adduser **`--disabled-password --gecos "" teamspeak && sudo su teamspeak`** and press **Enter** to create a new user and switch to it.
 
 
 Step 4 - Installing TeamSpeak
 ---------------------------------------------------------------------
-You need to install the **bzip2** software for the installation, which you can install through this method.
+You need to install the **`bzip2`** software for the installation, which you can install through this method.
 
-sudo apt update && sudo apt install bzip2
+`sudo apt update && sudo apt install bzip2`
 
-Enter ****cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64**** and press **Enter** to download the server.
+1. Enter **`cd ~ && wget https://files.teamspeak-services.com/releases/server/3.13.7/teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && tar xvf teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && rm teamspeak3-server_linux_amd64-3.13.7.tar.bz2 && mv teamspeak3-server_linux_amd64/* . && rmdir teamspeak3-server_linux_amd64`** and press **`Enter`** to download the server.
+2. Accept the TeamSpeak License **`touch .ts3server_license_accepted`**.
 
-Accept the TeamSpeak License **touch .ts3server_license_accepted**.
+Step 5 - Setting up TeamSpeak to start on boot
+---------------------------------------------------------------------
+We want TeamSpeak to start automatically when the server starts. This is useful when the server is restarted so that TeamSpeak also starts automatically.
 
+1. Enter **`exit`** and press **`Enter`** to return to the root user.
+2. Enter **`nano /etc/systemd/system/teamspeak.service`** and press **`Enter`** to create a new systemd service file.
+3. Paste the following code into this file:
+
+```systemd
+[Unit]
+Description=TeamSpeak 3 Server
+After=network.target
+
+[Service]
+WorkingDirectory=/home/teamspeak
+User=teamspeak
+ExecStart=/home/teamspeak/ts3server_startscript.sh start inifile=ts3server.ini
+ExecStop=/home/teamspeak/ts3server_startscript.sh stop
+PIDFile=/home/teamspeak/ts3server.pid
+RestartSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+4. Exit the file by pressing **`Ctrl + X`** and then **`Y`** and then **`Enter`**.
+5. Enter **`systemctl daemon-reload && systemctl enable teamspeak && systemctl start teamspeak`** to reload the systemd daemon.
+
+Step 6 - Setting up the firewall
+---------------------------------------------------------------------
